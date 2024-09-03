@@ -1,0 +1,19 @@
+#Input file for the Python Bluecat code - Please see the README file - BEWARE: columns after the 30th are for comments
+
+Arnocalib.txt                  #Filename calibration data
+Arnodmodelsim.txt              #Filename model predictions to compute confidence bands
+2                              #Nmodels: number of models in multimodel simulation
+2                              #Uncmeas: uncertainty measure in multimodel simulation
+avg                            #Indicates how the stochastic prediction is computed - Options are avg or mdn
+False                          #Indicates how confidence limits are computed - Option are False for k-moments or True for empirical quantiles
+0.2                            #Significance level (in the range 0,1)
+100                            #Value of m
+80                             #Value of m1
+0.1 1 1 nan                    #For k-moments estimation - Initial value for the parameters of the PBF distribution
+0.001 0.001 0.001 0            #For k-moments estimation - Lower value for the parameters of the PBF distribution
+1 5 20 nan                     #For k-moments estimation - Upper value for the parameters of the PBF distribution
+True                           #Option for computing or not the diagnostics - Options are True or False
+-10E6                          #Threshold value of the prediction to compute the confidence limits
+Yes                            #Whether observed data are available for diagnostics - Options are Yes or None
+Arnoqosspred.txt               #Filename observed data to be compared with model prediction - Only if Yes is introduced in the previous line
+Powell                         #Optimisation method for k-moments computation. Options are: Nelder-Mead, Powell and others (https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)
