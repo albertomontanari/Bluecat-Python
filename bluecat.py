@@ -57,6 +57,8 @@ optimethod = content[18][:30].strip()
 settings.close()
 # If there are any open figures, close them (equivalent to R's graphics.off())
 plt.close('all')
+#Opening the file for writing the results
+f = open("results.txt", "w")
 #Reading Bluecat calibration data (from file resultcalib.txt) and modelprediction (from file dmodelsim.txt)
 #Beware: resultcalib.txt must be a text file, with columns headers qsim1, qoss1, qsim2, qoss2 and so on.
 resultcalib = pd.read_table(resultcalib, sep=" ")
@@ -119,7 +121,8 @@ for fmodels in range(nmodels):
 
     #Definition of auxiliary variable icount, to be used only to print on screen the progress of computation
     icount = 1
-    print("Bluecat uncertainty estimation. This will take some time")
+    print("\nBluecat uncertainty estimation for model ", (fmodels+1),". This will take some time")
+    f.write("\nBluecat uncertainty estimation for model "+str(fmodels+1)+"\n \n")
     print("Do not worry if you get some RuntimeWarnings - they arise from the iterative procedure for computing k-moments")
     print("Computing the mean stochastic prediction")
 
@@ -381,8 +384,8 @@ for fmodels in range(nmodels):
         qoss2 = qosspred[qosspred > cpptresh]
         percentage_above_upper = len(qoss2[qoss2 > suppred[qoss2 > cpptresh]]) / len(qoss2[~pd.isna(suppred)]) * 100
         percentage_below_lower = len(qoss2[qoss2 < infpred[qoss2 > cpptresh]]) / len(qoss2[~pd.isna(infpred)]) * 100
-        print(f"Percentage of points lying above the upper confidence limit={percentage_above_upper:.2f}%")
-        print(f"Percentage of points lying below the lower confidence limit={percentage_below_lower:.2f}%")
+        print("Percentage of points lying above the upper confidence limit="+str(round(percentage_above_upper,2))+"%")
+        print("Percentage of points lying below the lower confidence limit="+str(round(percentage_below_lower,2))+"%")
 
     if qosspred is not None:
         eff = 1 - np.sum((medpred - qosspred) ** 2) / np.sum((qosspred - np.mean(qosspred)) ** 2)
@@ -392,14 +395,22 @@ for fmodels in range(nmodels):
         uplimit[fmodels,]=suppred
         effsmodel[fmodels]=eff
     else:
-        detprediction[fmodels]=dmodelsim.iloc[:,fmodels]
+        detprediction[fmodels,]=dmodelsim.iloc[:,fmodels]
         stochprediction[fmodels,]=medpred
         lowlimit[fmodels,]=infpred
         uplimit[fmodels,]=suppred
+    if plotflag and nstep1 > 20 and qosspred is not None:
+        f.write("Efficienty deterministic model: "+str(eff1)+". Efficiency stochastic model: "+str(effsmodel[fmodels])+"\n \n")
+        f.write("Percentage of points lying above the upper confidence limit="+str(percentage_above_upper)+"% \n")
+        f.write("Percentage of points lying below the lower confidence limit="+str(percentage_below_lower)+"% \n\n")
+    f.write("Deterministic prediction     Stochastic prediction    Lower limit    Upper limit \n \n")
+    for iiii in range(nstep):
+        f.write(str(detprediction[fmodels,iiii])+"  "+str(stochprediction[fmodels,iiii])+"  "+str(lowlimit[fmodels,iiii])+"  "+str(lowlimit[fmodels,iiii])+"\n")
 
 # If there is more than one model, multimodel estimation starts here
 if nmodels > 1:
-    print("Bluecat uncertainty estimation for multi model. This will take some time")
+    print("\nBluecat uncertainty estimation for multi model. This will take some time")
+    f.write("\nBluecat uncertainty estimation for multi model \n\n")
     posminn = np.zeros(nstep, dtype=int)
     newmedpred = np.zeros(nstep)
     newlowlim = np.zeros(nstep)
@@ -542,27 +553,11 @@ if nmodels > 1:
         lowlimit[nmodels,] = newlowlim
         uplimit[nmodels,] = newuplim
 
-if nmodels > 1:
-    result = {
-        "detprediction": detprediction,
-        "stochprediction": stochprediction,
-        "lowlimit": lowlimit,
-        "uplimit": uplimit,
-        "effsmodel": effsmodel,
-        "posminn": posminn
-    }
-else:
-    result = {
-        "detprediction": detprediction,
-        "stochprediction": stochprediction,
-        "lowlimit": lowlimit,
-        "uplimit": uplimit,
-        "effsmodel": effsmodel,
-    }
-#Printing stochastic prediction and confidence limits on files
-with open('results.txt', 'w') as f:
-    print(result, file=f)
-#np.savetxt('casso.csv', result, delimiter=' ')
-#np.savetxt('medpred.csv', medpred, delimiter=' ')
-#np.savetxt('infpred.csv', infpred, delimiter=' ')
-#np.savetxt('suppred.csv', suppred, delimiter=' ')
+    if plotflag and nstep1 > 20 and qosspred is not None:
+        f.write("Efficienty deterministic multimodel: "+str(neweff1)+"Efficiency stochastic multimodel: "+str(effsmodel[nmodels])+"\n\n")
+        f.write("Percentage of points lying above the upper confidence limit="+str(np.sum(qosstemp[qosstemp > suppredtemp] > cpptresh) / len(qosstemp) * 100)+"% \n")
+        f.write("Percentage of points lying below the lower confidence limit="+str(np.sum(qosstemp1[qosstemp1 < infpredtemp] > cpptresh) / len(qosstemp1) * 100)+"% \n\n")
+    f.write("Deterministic prediction     Stochastic prediction    Lower limit    Upper limit \n \n")
+    for iiii in range(nstep):
+        f.write(str(detprediction[nmodels,iiii])+"    "+str(stochprediction[nmodels,iiii])+"    "+str(lowlimit[nmodels,iiii])+"    "+str(lowlimit[nmodels,iiii])+"\n")
+
