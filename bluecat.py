@@ -557,7 +557,12 @@ if nmodels > 1:
         f.write("Efficienty deterministic multimodel: "+str(neweff1)+"Efficiency stochastic multimodel: "+str(effsmodel[nmodels])+"\n\n")
         f.write("Percentage of points lying above the upper confidence limit="+str(np.sum(qosstemp[qosstemp > suppredtemp] > cpptresh) / len(qosstemp) * 100)+"% \n")
         f.write("Percentage of points lying below the lower confidence limit="+str(np.sum(qosstemp1[qosstemp1 < infpredtemp] > cpptresh) / len(qosstemp1) * 100)+"% \n\n")
+
     f.write("Deterministic prediction     Stochastic prediction    Lower limit    Upper limit \n \n")
     for iiii in range(nstep):
         f.write(str(detprediction[nmodels,iiii])+"    "+str(stochprediction[nmodels,iiii])+"    "+str(lowlimit[nmodels,iiii])+"    "+str(lowlimit[nmodels,iiii])+"\n")
+
+    if plotflag and nstep1 > 20 and qosspred is not None:
+        f.write("\nResults of model selection at each time step\n\n")
+        f.write(str(posminn))
 
