@@ -405,7 +405,7 @@ for fmodels in range(nmodels):
         f.write("Percentage of points lying below the lower confidence limit="+str(percentage_below_lower)+"% \n\n")
     f.write("Deterministic prediction     Stochastic prediction    Lower limit    Upper limit \n \n")
     for iiii in range(nstep):
-        f.write(str(detprediction[fmodels,iiii])+"  "+str(stochprediction[fmodels,iiii])+"  "+str(lowlimit[fmodels,iiii])+"  "+str(lowlimit[fmodels,iiii])+"\n")
+        f.write(str(detprediction[fmodels,iiii])+"  "+str(stochprediction[fmodels,iiii])+"  "+str(lowlimit[fmodels,iiii])+"  "+str(uplimit[fmodels,iiii])+"\n")
 
 # If there is more than one model, multimodel estimation starts here
 if nmodels > 1:
@@ -560,7 +560,7 @@ if nmodels > 1:
 
     f.write("Deterministic prediction     Stochastic prediction    Lower limit    Upper limit \n \n")
     for iiii in range(nstep):
-        f.write(str(detprediction[nmodels,iiii])+"    "+str(stochprediction[nmodels,iiii])+"    "+str(lowlimit[nmodels,iiii])+"    "+str(lowlimit[nmodels,iiii])+"\n")
+        f.write(str(detprediction[nmodels,iiii])+"    "+str(stochprediction[nmodels,iiii])+"    "+str(lowlimit[nmodels,iiii])+"    "+str(uplimit[nmodels,iiii])+"\n")
 
     if plotflag and nstep1 > 20 and qosspred is not None:
         f.write("\nResults of model selection at each time step\n\n")
