@@ -6,6 +6,14 @@ To run the software in R under the Linux operating system the following commands
 
 python3 bluecat.py
 
+Under the Windows environment, please install Python first. Then, from the Python console, install the modules pandas, numpy and scipy, with the commands:
+
+pip install pandas
+pip install numpy
+pip install scipy
+
+Then from a Windows terminal (application cmd, available in Windows by default) just run bluecat.py from the directory where the BLUECAT package has been downloaded (if you downloaded the zip file do not forget to unzip it before running the code). For more details please see https://docs.python.org/3/faq/windows.html, which also explain how to create an executable file from a Python code.
+
 The software comes with two data sets described in Montanari and Koutsoyiannis (2024, preprint). They refer to the prediction of tree ring withds and the multimodel prediction of daily river flow for the Arno River Basin, in Italy (see Montanari and Koutsoyiannis (2024), preprint, not yet available).
 
 To reproduce the case study of the tree ring width simulation (Franke et al., 2022), rename the file settings-TRW.txt to settings.txt. Pay attention to the description of the various options that is given in the file. Additional details for the options are given here below. Once settings are defined, you just have to launch the software with the above command.
