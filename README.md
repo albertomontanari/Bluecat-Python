@@ -42,7 +42,7 @@ It is a text file with columns qoss (observed data) and qsim (simulated data) in
 ### Filename of model predictions whose uncertainty is to be estimated
 In each column a prediction is to be given.
 
-### Nmodels
+### nmodels
 Number of models in the multimodel simulation.
 
 ### unmeas
