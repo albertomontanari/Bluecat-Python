@@ -9,7 +9,9 @@ python3 bluecat.py
 Under the Windows environment, please install Python first. Then, from the Python console, install the modules pandas, numpy and scipy, with the commands:
 
 pip install pandas
+
 pip install numpy
+
 pip install scipy
 
 Then from a Windows terminal (application cmd, available in Windows by default) just run bluecat.py from the directory where the BLUECAT package has been downloaded (if you downloaded the zip file do not forget to unzip it before running the code). For more details please see https://docs.python.org/3/faq/windows.html, which also explain how to create an executable file from a Python code.
