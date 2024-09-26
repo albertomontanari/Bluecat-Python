@@ -6,7 +6,7 @@ To run the software in R under the Linux operating system the following commands
 
 python3 bluecat.py
 
-Under the Windows environment, please install Python first. Then, from the Python console, install the modules pandas, numpy and scipy, with the commands:
+Under the Windows environment, please install Python first. Then, install the modules pandas, numpy and scipy, with the commands:
 
 pip install pandas
 
