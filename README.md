@@ -37,10 +37,10 @@ The code takes as input a calibration data set formed by deterministic model pre
 ### Options (to be specified in the settings.txt file)
 
 ### Filename calibration data
-It is a text file with columns qoss (observed data) and qsim (simulated data) in calibration for each prediction model.
+It is a text file with columns qoss (observed data) and qsim (simulated data) in calibration for each prediction model. NOTE: NA values are not accepted. If you have NAs, e.g. in the observed tata, remove them and remove the corresponding simulated value as well.
 
 ### Filename of model predictions whose uncertainty is to be estimated
-In each column a prediction is to be given.
+In each column a prediction is to be given. NA values are not accepted.
 
 ### nmodels
 Number of models in the multimodel simulation.
