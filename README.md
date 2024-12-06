@@ -88,6 +88,7 @@ Options are "Yes" or "no"
 ### Optimisation method for computing k-moments.
 Options are: Nelder-Mead, Powell and others (https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)
 
+Note: the routine may file if the fitting of the parameters of the PBF distribution fails when estimating confidence bands with robust quantiles. If you get an unexpected break of the routine please try diffierent values for upper and lower bounds of the PBF parameters.
 
 ## References
 
