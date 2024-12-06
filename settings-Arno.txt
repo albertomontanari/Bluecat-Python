@@ -10,7 +10,7 @@ False                          #Indicates how confidence limits are computed - O
 100                            #Value of m
 80                             #Value of m1
 0.1 1 1 nan                    #For k-moments estimation - Initial value for the parameters of the PBF distribution
-0.001 0.5 0.001 0              #For k-moments estimation - Lower value for the parameters of the PBF distribution
+0.001 0.5 0.001 0              #For k-moments estimation - Lower value for the parameters of the PBF distribution - Note: if you get an error in the application of robust quantiles make an attempt to set different limiting values for PBF parameters
 1 5 20 nan                     #For k-moments estimation - Upper value for the parameters of the PBF distribution
 True                           #Option for computing or not the diagnostics - Options are True or False
 -10E6                          #Threshold value of the prediction to compute the confidence limits
