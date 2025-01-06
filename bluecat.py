@@ -85,6 +85,8 @@ if(nmodels>1):
     lowlimit=np.zeros((nmodels+1,nstep))
     uplimit=np.zeros((nmodels+1,nstep))
     effsmodel=np.zeros((nmodels+1))
+    effcalib=np.zeros((nmodels+1,nstep))
+    errcalib=np.zeros((nmodels+1,nstep))
     zeta=np.zeros((nmodels+1,nstep))
 else:
     detprediction=np.zeros((nmodels,nstep))
@@ -118,6 +120,8 @@ for fmodels in range(nmodels):
     medpred = np.zeros(nstep)
     infpred = np.zeros(nstep)
     suppred = np.zeros(nstep)
+    effcal = np.zeros(nstep)
+    errcal = np.zeros(nstep)
 
     #Definition of auxiliary variable icount, to be used only to print on screen the progress of computation
     icount = 1
@@ -150,6 +154,9 @@ for fmodels in range(nmodels):
             medpred[i] = np.mean(qossc[aux2:(aux1+1)])
         elif predsmodel == "mdn":
             medpred[i] = np.median(qossc[aux2:(aux1+1)])
+        #Compute Nash efficienty and mean absolute error for observed and simulated data)
+        effcal[i]=1-np.sum((sortcalibsim[aux2:(aux1+1)]-qossc[aux2:(aux1+1)])**2)/np.sum(qossc[aux2:(aux1+1)]-np.mean(qossc[aux2:(aux1+1)])**2)
+        errcal[i]=np.mean(abs(sortcalibsim[aux2:(aux1+1)]-qossc[aux2:(aux1+1)]))
     #Put back medpred in chronological order
     medpred = medpred[np.argsort(aux)]
     #Choose between empirical quantiles and k-moments quantiles
@@ -393,12 +400,16 @@ for fmodels in range(nmodels):
         stochprediction[fmodels,]=medpred
         lowlimit[fmodels,]=infpred
         uplimit[fmodels,]=suppred
+        effcalib[fmodels,]=effcal
+        errcalib[fmodels,]=errcal
         effsmodel[fmodels]=eff
     else:
         detprediction[fmodels,]=dmodelsim.iloc[:,fmodels]
         stochprediction[fmodels,]=medpred
         lowlimit[fmodels,]=infpred
         uplimit[fmodels,]=suppred
+        effcalib[fmodels,]=effcal
+        errcalib[fmodels,]=errcal
     if plotflag and nstep1 > 20 and qosspred is not None:
         f.write("Efficienty deterministic model: "+str(eff1)+". Efficiency stochastic model: "+str(effsmodel[fmodels])+"\n \n")
         f.write("Percentage of points lying above the upper confidence limit="+str(percentage_above_upper)+"% \n")
@@ -426,8 +437,12 @@ if nmodels > 1:
                 confband[ii, i] = abs(uplimit[ii,i] - lowlimit[ii,i])
             elif uncmeas == 3:
                 confband[ii, i] = abs(detprediction[ii,i] - stochprediction[ii,i])
-            else:
+            elif uncmeas == 4:
                 confband[ii, i] = abs((detprediction[ii,i] - stochprediction[ii,i]) / stochprediction[ii,i])
+            elif uncmeas == 5:
+                confband[ii,i ] = effcalib[ii,i]
+            else:
+                confband[ii,i ] = errcal[ii,i]
         posmin = np.argmin(np.abs(confband[:, i]))
         if np.isnan(np.max(confband[:,i])):
             posmin = np.argmax(effsmodel)
